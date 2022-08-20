@@ -40,14 +40,9 @@ task fatJar(type: Jar) {
 }
 
 project.tasks.assemble.dependsOn project.tasks.fatJar
-jar.enabled = false
 
 clean.doFirst {
 	delete "$rootDir/out/"
-}
-
-tasks.withType(Jar) {
-	destinationDir = file("$rootDir/out/")
 }
 
 repositories {
