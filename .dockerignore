@@ -1,0 +1,31 @@
+# local stuff
+.env
+repository
+users.json
+config.json
+
+# build stuff
+.gradle
+**/build*
+!build.gradle
+!build.gradle.kts
+*.kexe
+*.klib
+
+# emacs
+**/*~
+**/#*#
+
+# idea
+.idea
+*.ipr
+*.iws
+**/classes
+**/out
+
+# qt
+*.user
+
+# kde
+**/.directory
+*kdev4*
