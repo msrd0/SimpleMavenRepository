@@ -1,9 +1,9 @@
 package io.puharesource.simplemavenrepo
 
-import org.apache.commons.codec.digest.DigestUtils
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import org.apache.commons.codec.digest.DigestUtils
 
 // Checksum
 
@@ -12,7 +12,7 @@ internal fun File.createMd5ChecksumFile() : File? {
         return null
     }
 
-    val checksumFile = File(parent, name + ".md5")
+    val checksumFile = File(parent, "$name.md5")
 
     if (!checksumFile.exists()) {
         checksumFile.createNewFile()
@@ -27,7 +27,7 @@ internal fun File.createSha1ChecksumFile() : File? {
         return null
     }
 
-    val checksumFile = File(parent, name + ".sha1")
+    val checksumFile = File(parent, "$name.sha1")
 
     if (!checksumFile.exists()) {
         checksumFile.createNewFile()

@@ -1,15 +1,14 @@
 package io.puharesource.simplemavenrepo
 
-import kotlinx.html.*
-import kotlinx.html.stream.createHTML
-import org.apache.commons.io.FileUtils
-import org.xml.sax.InputSource
-import spark.Spark
-import spark.Spark.*
 import java.io.File
 import javax.servlet.MultipartConfigElement
 import javax.servlet.http.Part
 import javax.xml.parsers.DocumentBuilderFactory
+import kotlinx.html.*
+import kotlinx.html.stream.createHTML
+import org.apache.commons.io.FileUtils
+import org.xml.sax.InputSource
+import spark.Spark.*
 
 object Routes {
     fun registerRoutes(
@@ -26,7 +25,7 @@ object Routes {
                 head {
                     title { +config.title }
 
-                    style { +adminCss }
+                    style { unsafe { +adminCss } }
                 }
 
                 body {
@@ -109,7 +108,7 @@ object Routes {
             var pomArtifactId = getPart("pomArtifactId")?.getText()
             var pomVersion = getPart("pomVersion")?.getText()
 
-            if (pomText != null && pomText.isNotBlank()) {
+            if (!pomText.isNullOrBlank()) {
                 val documentFactory = DocumentBuilderFactory.newInstance()
 
                 documentFactory.isIgnoringElementContentWhitespace = true
@@ -170,11 +169,11 @@ object Routes {
         }
 
         config.extraRepoPaths.forEach {
-            Spark.get("/$it") { _, response ->
+            get("/$it") { _, response ->
                 response.redirect("/repo/")
             }
 
-            Spark.get("/$it/*") { request, response ->
+            get("/$it/*") { request, response ->
                 val relativePath = request.uri().removePrefix("/$it/")
 
                 response.redirect("/repo/$relativePath")
@@ -192,7 +191,7 @@ object Routes {
 
                 return@get "Path not found."
             } else if (file.isFile) {
-                response.type(mimeTypes[file.extension])
+                response.type(mimeType(file.name))
 
                 return@get file.readBytes()
             } else if (file.isDirectory && (relativePath.isNotEmpty() && !relativePath.endsWith("/"))) {
@@ -201,7 +200,7 @@ object Routes {
             }
 
             val listedFiles = file.listFiles()
-            listedFiles.sortBy { it.name }
+            listedFiles?.sortBy { it.name }
 
             createHTML(prettyPrint = true).html {
                 val indexOf = file.path.removePrefix(repositoryDirectory.path).removePrefix(File.separator) + "/"
@@ -210,7 +209,8 @@ object Routes {
                     title("Index of $indexOf")
 
                     style {
-                        +"""
+                        unsafe {
+                            +"""
                             th {
                                 text-align: left;
                             }
@@ -218,7 +218,8 @@ object Routes {
                             table {
                                 border-spacing: 5px;
                             }
-                        """.trimIndent()
+                            """.trimIndent()
+                        }
                     }
                 }
 
@@ -241,17 +242,16 @@ object Routes {
                                 td()
                             }
                         }
-
-                        for (listedFile in listedFiles) {
+    
+                        listedFiles?.forEach { listedFile ->
                             val lastModified = listedFile.getLastModifiedString()
                             val trimmedPath = listedFile.path.removePrefix(listedFile.parent).removePrefix(File.separator)
-
-                            val href: String = if (listedFile.isDirectory) {
-                                trimmedPath + "/"
-                            } else {
-                                trimmedPath
+    
+                            val href: String = when {
+                                listedFile.isDirectory -> "$trimmedPath/"
+                                else -> trimmedPath
                             }
-
+    
                             tr {
                                 td { a(href = href) { +trimmedPath } }
                                 td { +lastModified }

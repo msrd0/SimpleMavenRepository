@@ -6,7 +6,7 @@ data class Config(
         val port: Int = 8234,
         val title: String = "Simple Maven Repository",
         val storagePath: String = "repository",
-        val extraRepoPaths: Array<String> = arrayOf("repository")) {
+        val extraRepoPaths: List<String> = listOf("repository")) {
     companion object {
         fun loadConfig(configFile: File): Config {
             if (!configFile.exists()) {

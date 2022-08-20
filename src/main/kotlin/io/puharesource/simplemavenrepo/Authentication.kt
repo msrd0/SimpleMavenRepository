@@ -1,12 +1,10 @@
 package io.puharesource.simplemavenrepo
 
 import com.github.salomonbrys.kotson.gsonTypeToken
-import spark.Request
-import spark.Response
-import spark.Spark
 import java.io.File
 import java.nio.charset.Charset
-import java.util.*
+import java.util.Base64
+import spark.*
 
 class Authentication(usersFile: File) {
     val users: MutableMap<String, String>
@@ -17,7 +15,7 @@ class Authentication(usersFile: File) {
             usersFile.writeText("{}")
         }
 
-        users = gson.fromJson<MutableMap<String, String>>(usersFile.readText(), gsonTypeToken<MutableMap<String, String>>())
+        users = gson.fromJson(usersFile.readText(), gsonTypeToken<MutableMap<String, String>>())
     }
 
     fun handle(request: Request, response: Response) {

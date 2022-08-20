@@ -1,20 +1,23 @@
 package io.puharesource.simplemavenrepo
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import spark.Spark.*
-import spark.staticfiles.MimeType
+import com.google.gson.*
 import java.io.File
+import spark.Spark.*
+import spark.resource.AbstractFileResolvingResource
+import spark.staticfiles.MimeType
 
 internal val gson : Gson = GsonBuilder().setPrettyPrinting().create()
-internal val mimeTypes : MutableMap<String, String> by lazy {
-    val field = MimeType::class.java.getDeclaredField("mappings")
-    field.isAccessible = true
 
-    return@lazy field.get(null) as MutableMap<String, String>
+private class FileName(private val name: String): AbstractFileResolvingResource() {
+    override fun getFilename() = name
+    
+    override fun getInputStream() = throw UnsupportedOperationException()
+    override fun getDescription() = throw UnsupportedOperationException()
 }
 
-fun main(args: Array<String>) {
+internal fun mimeType(filename: String) = MimeType.fromResource(FileName(filename))
+
+fun main() {
     // Load config file
     val config = Config.loadConfig(File("config.json"))
 
@@ -35,7 +38,7 @@ fun main(args: Array<String>) {
     if (!defaultPomFile.exists()) {
         defaultPomFile.createNewFile()
 
-        defaultPomFile.writeText(Authentication::class.java.getResourceAsStream("/default_pom.xml").bufferedReader().readText())
+        defaultPomFile.writeText(Authentication::class.java.getResourceAsStream("/default_pom.xml")!!.bufferedReader().readText())
     }
 
     port(config.port)
@@ -45,7 +48,7 @@ fun main(args: Array<String>) {
             authentication = Authentication(usersFile),
             tmpDirectory = tmpDirectory,
             repositoryDirectory = repositoryDirectory,
-            adminCss = Authentication::class.java.getResourceAsStream("/admin.css").bufferedReader().readText(),
+            adminCss = Authentication::class.java.getResourceAsStream("/admin.css")!!.bufferedReader().readText(),
             defaultPom = defaultPomFile.readText()
     )
 }
