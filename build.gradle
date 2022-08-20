@@ -2,7 +2,7 @@ group 'io.puharesource.simplemavenrepo'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.1.4'
+    ext.kotlin_version = '1.7.10'
 
     repositories {
         mavenCentral()
@@ -13,19 +13,28 @@ buildscript {
     }
 }
 
+apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 
 sourceCompatibility = 1.8
 
+final main = 'io.puharesource.simplemavenrepo.SimpleMavenRepoKt'
+
+application {
+    mainClass = main
+}
+
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'A Simple Maven Repository',
                 'Implementation-Version': version,
-                'Main-Class': 'io.puharesource.simplemavenrepo.SimpleMavenRepoKt'
+                'Main-Class': main
     }
 
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
     with jar
 }
 
@@ -42,31 +51,22 @@ tasks.withType(Jar) {
 
 repositories {
     mavenCentral()
-    jcenter()
-
-    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
 }
 
 dependencies {
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: kotlin_version
-    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-html-jvm', version: '0.6.3'
+    implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: kotlin_version
+    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-html-jvm', version: '0.8.0'
 
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.11'
 
-    compile group: 'com.sparkjava', name: 'spark-kotlin', version: '1.0.0-alpha'
-    compile group: 'com.qmetric', name: 'spark-authentication', version: '1.4'
+    implementation group: 'com.sparkjava', name: 'spark-kotlin', version: '1.0.0-alpha'
+    implementation group: 'com.qmetric', name: 'spark-authentication', version: '1.4'
 
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
-    compile group: 'com.github.salomonbrys.kotson', name: 'kotson', version: '2.5.0'
-    compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.1'
+    implementation group: 'com.github.salomonbrys.kotson', name: 'kotson', version: '2.5.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.5'
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
-
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 compileKotlin {
