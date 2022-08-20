@@ -67,7 +67,7 @@ dependencies {
 	implementation group: 'com.github.salomonbrys.kotson', name: 'kotson', version: '2.5.0'
 	implementation group: 'commons-io', name: 'commons-io', version: '2.5'
 	
-	testImplementation group: 'junit', name: 'junit', version: '4.12'
+	testImplementation group: 'junit', name: 'junit', version: '4.13.2'
 }
 
 compileKotlin {
