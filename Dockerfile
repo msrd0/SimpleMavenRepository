@@ -1,4 +1,4 @@
-FROM gradle:7-jdk17 AS builder
+FROM gradle:8-jdk17 AS builder
 USER root
 
 ARG project=SimpleMavenRepo
@@ -15,7 +15,7 @@ RUN gradle :distTar \
 
 ########################
 
-FROM alpine:3.16
+FROM alpine:3.17
 
 VOLUME /data
 
