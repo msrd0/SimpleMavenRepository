@@ -53,7 +53,7 @@ dependencies {
 	implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: kotlin_version
 	implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-html-jvm', version: '0.8.0'
 	
-	implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.6'
+	implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.7'
 	
 	implementation group: 'com.sparkjava', name: 'spark-kotlin', version: '1.0.0-alpha'
 	implementation group: 'com.qmetric', name: 'spark-authentication', version: '1.4'
