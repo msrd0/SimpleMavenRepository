@@ -51,7 +51,7 @@ repositories {
 
 dependencies {
 	implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: kotlin_version
-	implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-html-jvm', version: '0.8.1'
+	implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-html-jvm', version: '0.9.0'
 	
 	implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.7'
 	
