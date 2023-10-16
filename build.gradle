@@ -3,7 +3,7 @@ version '1.0.0'
 
 buildscript {
 	ext.kotlin_version = '1.9.10'
-	ext.jetty_version = '9.4.52.v20230823'
+	ext.jetty_version = '9.4.53.v20231009'
 	
 	repositories {
 		mavenCentral()
