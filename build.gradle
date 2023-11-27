@@ -2,7 +2,7 @@ group 'io.puharesource.simplemavenrepo'
 version '1.0.0'
 
 buildscript {
-	ext.kotlin_version = '1.9.20'
+	ext.kotlin_version = '1.9.21'
 	ext.jetty_version = '9.4.53.v20231009'
 	
 	repositories {
